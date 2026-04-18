@@ -1,7 +1,23 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 export function SiteHeader() {
+  const [authed, setAuthed] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => setAuthed(!!session));
+    supabase.auth.getSession().then(({ data }) => setAuthed(!!data.session));
+    return () => sub.subscription.unsubscribe();
+  }, []);
+
+  async function handleSignOut() {
+    await supabase.auth.signOut();
+    navigate({ to: "/" });
+  }
+
   return (
     <motion.header
       initial={{ y: -20, opacity: 0 }}
@@ -37,13 +53,23 @@ export function SiteHeader() {
             </Link>
           ))}
         </nav>
-        <Link
-          to="/dashboard"
-          className="group inline-flex items-center gap-2 rounded-full bg-foreground px-4 py-1.5 text-sm font-medium text-background transition hover:bg-primary"
-        >
-          <span className="h-1.5 w-1.5 rounded-full bg-primary group-hover:bg-background animate-pulse" />
-          Open app
-        </Link>
+        {authed ? (
+          <button
+            onClick={handleSignOut}
+            className="inline-flex items-center gap-2 rounded-full bg-foreground px-4 py-1.5 text-sm font-medium text-background transition hover:bg-primary"
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
+            Sign out
+          </button>
+        ) : (
+          <Link
+            to="/auth"
+            className="group inline-flex items-center gap-2 rounded-full bg-foreground px-4 py-1.5 text-sm font-medium text-background transition hover:bg-primary"
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-primary group-hover:bg-background animate-pulse" />
+            Sign in
+          </Link>
+        )}
       </div>
     </motion.header>
   );
