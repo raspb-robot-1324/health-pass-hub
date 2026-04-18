@@ -14,7 +14,258 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      ai_insights: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          kind: string
+          profile_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          kind: string
+          profile_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          profile_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_insights_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      allergies: {
+        Row: {
+          id: string
+          name: string
+          profile_id: string
+          severity: string | null
+        }
+        Insert: {
+          id?: string
+          name: string
+          profile_id: string
+          severity?: string | null
+        }
+        Update: {
+          id?: string
+          name?: string
+          profile_id?: string
+          severity?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "allergies_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      appointments: {
+        Row: {
+          created_at: string
+          doctor: string | null
+          id: string
+          location: string | null
+          notes: string | null
+          profile_id: string
+          specialty: string | null
+          starts_at: string
+          status: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          doctor?: string | null
+          id?: string
+          location?: string | null
+          notes?: string | null
+          profile_id: string
+          specialty?: string | null
+          starts_at: string
+          status?: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          doctor?: string | null
+          id?: string
+          location?: string | null
+          notes?: string | null
+          profile_id?: string
+          specialty?: string | null
+          starts_at?: string
+          status?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointments_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conditions: {
+        Row: {
+          diagnosed_at: string | null
+          id: string
+          name: string
+          profile_id: string
+        }
+        Insert: {
+          diagnosed_at?: string | null
+          id?: string
+          name: string
+          profile_id: string
+        }
+        Update: {
+          diagnosed_at?: string | null
+          id?: string
+          name?: string
+          profile_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conditions_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      emergency_contacts: {
+        Row: {
+          id: string
+          name: string
+          phone: string
+          profile_id: string
+          relation: string | null
+        }
+        Insert: {
+          id?: string
+          name: string
+          phone: string
+          profile_id: string
+          relation?: string | null
+        }
+        Update: {
+          id?: string
+          name?: string
+          phone?: string
+          profile_id?: string
+          relation?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "emergency_contacts_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      medications: {
+        Row: {
+          created_at: string
+          dose: string | null
+          id: string
+          name: string
+          notes: string | null
+          profile_id: string
+          schedule: string | null
+        }
+        Insert: {
+          created_at?: string
+          dose?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          profile_id: string
+          schedule?: string | null
+        }
+        Update: {
+          created_at?: string
+          dose?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          profile_id?: string
+          schedule?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "medications_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          age: number | null
+          avatar_url: string | null
+          blood_type: string | null
+          city: string | null
+          created_at: string
+          full_name: string
+          id: string
+          is_demo: boolean
+          pulseid_code: string | null
+          sex: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          age?: number | null
+          avatar_url?: string | null
+          blood_type?: string | null
+          city?: string | null
+          created_at?: string
+          full_name: string
+          id?: string
+          is_demo?: boolean
+          pulseid_code?: string | null
+          sex?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          age?: number | null
+          avatar_url?: string | null
+          blood_type?: string | null
+          city?: string | null
+          created_at?: string
+          full_name?: string
+          id?: string
+          is_demo?: boolean
+          pulseid_code?: string | null
+          sex?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
