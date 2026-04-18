@@ -1,14 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ShieldCheck, AlertTriangle, Phone, Droplet, HeartPulse, Pill } from "lucide-react";
+import { motion } from "framer-motion";
+import { ShieldCheck, AlertTriangle, Phone, Droplet, HeartPulse, Pill, User } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 
 export const Route = createFileRoute("/passport")({
   head: () => ({
     meta: [
-      { title: "Emergency Passport — PulseID" },
-      { name: "description", content: "Critical medical info — blood type, allergies, conditions and emergency contacts — visible to first responders in seconds." },
-      { property: "og:title", content: "Emergency Passport — PulseID" },
-      { property: "og:description", content: "Critical medical info for first responders." },
+      { title: "Emergency Passport — Pulseid" },
+      { name: "description", content: "Critical medical info for first responders." },
     ],
   }),
   component: Passport,
@@ -16,77 +15,123 @@ export const Route = createFileRoute("/passport")({
 
 function Passport() {
   return (
-    <div className="min-h-screen bg-gradient-soft">
+    <div className="min-h-screen bg-background">
       <SiteHeader />
-      <main className="mx-auto max-w-4xl px-6 py-12">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-emergency text-emergency-foreground">
-            <ShieldCheck className="h-5 w-5" />
+      <main className="mx-auto max-w-5xl px-6 pt-32 pb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="border-b border-border pb-8"
+        >
+          <div className="font-mono text-xs uppercase tracking-[0.3em] text-emergency">// Emergency Passport</div>
+          <h1 className="mt-3 font-display text-7xl leading-[1] tracking-tight md:text-8xl">
+            Alex <span className="italic">Morgan</span>
+          </h1>
+          <div className="mt-4 flex flex-wrap gap-x-8 gap-y-2 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            <span>Age 34</span>
+            <span>Female</span>
+            <span>San Francisco · CA</span>
+            <span>Pulseid #ax-m72k</span>
           </div>
-          <div>
-            <div className="text-xs font-semibold uppercase tracking-wider text-emergency">Emergency Passport</div>
-            <h1 className="font-display text-3xl font-bold tracking-tight md:text-4xl">Alex Morgan, 34</h1>
-          </div>
-        </div>
+        </motion.div>
 
         {/* Critical band */}
-        <div className="mt-8 overflow-hidden rounded-3xl border-2 border-emergency/30 bg-card shadow-elegant">
-          <div className="flex items-center gap-2 bg-emergency px-6 py-3 text-sm font-semibold uppercase tracking-wider text-emergency-foreground">
-            <AlertTriangle className="h-4 w-4" /> Critical info — show to medical personnel
+        <motion.div
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.1 }}
+          className="mt-10 overflow-hidden rounded-3xl border-2 border-emergency bg-emergency/5"
+        >
+          <div className="flex items-center justify-between bg-emergency px-6 py-3 text-emergency-foreground">
+            <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.25em]">
+              <AlertTriangle className="h-4 w-4" /> Show to medical personnel
+            </div>
+            <span className="font-mono text-xs">verified · 12.04.26</span>
           </div>
-          <div className="grid gap-6 p-7 md:grid-cols-3">
-            <Field icon={Droplet} label="Blood type" value="O+" />
-            <Field icon={HeartPulse} label="Conditions" value="Asthma · Hypertension" />
-            <Field icon={Pill} label="Allergies" value="Penicillin · Peanuts" />
+          <div className="grid gap-px bg-border md:grid-cols-3">
+            <Field icon={Droplet} label="Blood type" value="O+" big />
+            <Field icon={HeartPulse} label="Conditions" value="Asthma · HTN" big />
+            <Field icon={Pill} label="Allergies" value="Penicillin" big />
           </div>
-        </div>
+        </motion.div>
 
-        <div className="mt-6 grid gap-6 md:grid-cols-2">
-          <section className="rounded-3xl border border-border bg-card p-7 shadow-card">
-            <h2 className="font-display text-lg font-semibold">Current medications</h2>
-            <ul className="mt-4 space-y-2 text-sm">
-              {["Atorvastatin 10 mg — evening", "Albuterol inhaler — as needed", "Lisinopril 5 mg — morning"].map((m) => (
-                <li key={m} className="rounded-xl bg-secondary px-3 py-2">{m}</li>
+        {/* Lower grid */}
+        <div className="mt-6 grid gap-4 md:grid-cols-12">
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="md:col-span-7 rounded-3xl border border-border bg-card p-8"
+          >
+            <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">// Current medications</div>
+            <ul className="mt-5 divide-y divide-border">
+              {[
+                { n: "Atorvastatin", d: "10 mg · evening" },
+                { n: "Albuterol", d: "Inhaler · as needed" },
+                { n: "Lisinopril", d: "5 mg · morning" },
+              ].map((m, i) => (
+                <li key={m.n} className="flex items-baseline justify-between py-4">
+                  <div className="flex items-baseline gap-4">
+                    <span className="font-mono text-xs text-muted-foreground">0{i + 1}</span>
+                    <span className="font-display text-2xl">{m.n}</span>
+                  </div>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{m.d}</span>
+                </li>
               ))}
             </ul>
-          </section>
+          </motion.section>
 
-          <section className="rounded-3xl border border-border bg-card p-7 shadow-card">
-            <h2 className="font-display text-lg font-semibold">Emergency contacts</h2>
-            <ul className="mt-4 space-y-3">
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="md:col-span-5 rounded-3xl border border-border bg-card p-8"
+          >
+            <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
+              <User className="h-3 w-3" /> Emergency contacts
+            </div>
+            <ul className="mt-5 space-y-4">
               {[
                 { n: "Sam Morgan", r: "Spouse", p: "+1 (415) 555-0192" },
                 { n: "Dr. Elena Reyes", r: "Primary physician", p: "+1 (415) 555-0144" },
               ].map((c) => (
-                <li key={c.n} className="flex items-center justify-between rounded-xl border border-border p-3">
-                  <div>
-                    <div className="text-sm font-semibold">{c.n}</div>
-                    <div className="text-xs text-muted-foreground">{c.r}</div>
+                <li key={c.n} className="rounded-2xl border border-border p-4">
+                  <div className="flex items-baseline justify-between">
+                    <div className="font-display text-2xl">{c.n}</div>
+                    <a href={`tel:${c.p}`} className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-emergency text-emergency-foreground">
+                      <Phone className="h-4 w-4" />
+                    </a>
                   </div>
-                  <a href={`tel:${c.p}`} className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground">
-                    <Phone className="h-3 w-3" /> Call
-                  </a>
+                  <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{c.r} · {c.p}</div>
                 </li>
               ))}
             </ul>
-          </section>
+          </motion.section>
         </div>
 
-        <p className="mt-8 text-center text-xs text-muted-foreground">
-          This passport is encrypted and only the fields you mark as public appear here. Last updated Apr 12, 2026.
-        </p>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="mt-10 flex items-center justify-between border-t border-border pt-6 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground"
+        >
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="h-3.5 w-3.5 text-success" /> Encrypted · only public fields shown
+          </div>
+          <div>Last verified · Apr 12, 2026</div>
+        </motion.div>
       </main>
     </div>
   );
 }
 
-function Field({ icon: Icon, label, value }: { icon: React.ComponentType<{ className?: string }>; label: string; value: string }) {
+function Field({ icon: Icon, label, value, big }: { icon: React.ComponentType<{ className?: string }>; label: string; value: string; big?: boolean }) {
   return (
-    <div>
-      <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-        <Icon className="h-3.5 w-3.5" /> {label}
+    <div className="bg-background p-7">
+      <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
+        <Icon className="h-3.5 w-3.5 text-emergency" /> {label}
       </div>
-      <div className="mt-2 font-display text-xl font-bold text-foreground">{value}</div>
+      <div className={`mt-4 font-display tracking-tight ${big ? "text-5xl md:text-6xl" : "text-3xl"}`}>{value}</div>
     </div>
   );
 }
