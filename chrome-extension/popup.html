@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      width: 360px;
+      font-family: -apple-system, 'Inter', system-ui, sans-serif;
+      background: #080612;
+      color: #e8e8f0;
+    }
+
+    /* ── TABS ─────────────────────────────────────────────── */
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .tab {
+      flex: 1;
+      padding: 12px 0;
+      background: none;
+      border: none;
+      color: #6b6b8a;
+      font-size: 11px;
+      font-family: inherit;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s;
+    }
+    .tab.active { color: #fff; border-bottom-color: #7c3aed; }
+
+    .panel { display: none; padding: 18px 20px; }
+    .panel.active { display: block; }
+
+    /* ── FORM ─────────────────────────────────────────────── */
+    .field-group { margin-bottom: 12px; }
+    .field-label {
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #6b6b8a;
+      margin-bottom: 5px;
+    }
+    .field-row { display: flex; gap: 8px; }
+    .field-row .field-group { flex: 1; }
+    input[type="text"], input[type="email"], input[type="date"], input[type="tel"] {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 9px 12px;
+      color: #e8e8f0;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    input:focus { border-color: rgba(124, 58, 237, 0.6); }
+
+    .btn-save {
+      width: 100%;
+      padding: 11px;
+      border-radius: 10px;
+      border: none;
+      background: rgba(124, 58, 237, 0.2);
+      border: 1px solid rgba(124, 58, 237, 0.4);
+      color: #c4b5fd;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.15s;
+      margin-top: 4px;
+    }
+    .btn-save:hover { background: rgba(124, 58, 237, 0.35); }
+
+    .saved-badge {
+      display: none;
+      font-size: 11px;
+      color: #34d399;
+      text-align: center;
+      margin-top: 8px;
+      font-weight: 600;
+    }
+
+    /* ── ACTION PANEL ─────────────────────────────────────── */
+    .pulse-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #a78bfa;
+      box-shadow: 0 0 8px 2px rgba(167, 139, 250, 0.7);
+      animation: pulse 1.8s ease-in-out infinite;
+      display: inline-block;
+      margin-right: 6px;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    .mode-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #6b6b8a;
+      margin-bottom: 8px;
+    }
+
+    .btn-autopilot {
+      width: 100%;
+      padding: 13px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, #7c3aed, #6366f1);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: opacity 0.15s, transform 0.15s;
+      box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
+      margin-bottom: 10px;
+    }
+    .btn-autopilot:hover { opacity: 0.92; transform: translateY(-1px); }
+    .btn-autopilot:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    .btn-autofill {
+      width: 100%;
+      padding: 11px;
+      border-radius: 10px;
+      border: 1px solid rgba(167, 139, 250, 0.25);
+      background: rgba(167, 139, 250, 0.08);
+      color: #c4b5fd;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.15s;
+      margin-bottom: 14px;
+    }
+    .btn-autofill:hover { background: rgba(167, 139, 250, 0.15); }
+    .btn-autofill:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .log-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
+      padding: 10px 12px;
+      min-height: 70px;
+      max-height: 110px;
+      overflow-y: auto;
+      font-size: 11px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      color: #8888aa;
+      line-height: 1.7;
+    }
+    .log-box .log-success { color: #34d399; }
+    .log-box .log-warn    { color: #fbbf24; }
+    .log-box .log-error   { color: #f87171; }
+    .log-box .log-info    { color: #818cf8; }
+
+    .footer {
+      font-size: 10px;
+      color: #2a2a3a;
+      text-align: center;
+      padding: 10px 20px 14px;
+    }
+    .profile-hint {
+      font-size: 10px;
+      color: #6b6b8a;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    .profile-hint b { color: #a78bfa; }
+  </style>
+</head>
+<body>
+
+  <div class="tabs">
+    <button class="tab active" id="tab-fill" onclick="switchTab('fill')">🚀 Fill Form</button>
+    <button class="tab" id="tab-profile" onclick="switchTab('profile')">👤 My Info</button>
+  </div>
+
+  <!-- ── FILL PANEL ─────────────────────────────────────── -->
+  <div class="panel active" id="panel-fill">
+    <p class="profile-hint">Enter your info in <b>My Info</b> first, then use the buttons below on the ClicSante appointment page.</p>
+
+    <div class="mode-label"><span class="pulse-dot"></span>Auto-Pilot — navigates to Step 5</div>
+    <button class="btn-autopilot" id="autoPilotBtn">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+      Launch Auto-Pilot
+    </button>
+
+    <div class="mode-label">✍️ Manual — fill visible fields only</div>
+    <button class="btn-autofill" id="fillBtn">Auto-fill This Form</button>
+
+    <div class="log-box" id="logBox">
+      <span class="log-info">● Ready — go to ClicSante and navigate to Step 5.</span>
+    </div>
+  </div>
+
+  <!-- ── PROFILE PANEL ───────────────────────────────────── -->
+  <div class="panel" id="panel-profile">
+    <div class="field-row">
+      <div class="field-group">
+        <label class="field-label" for="inp-fname">Prénom</label>
+        <input type="text" id="inp-fname" placeholder="Jean" />
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="inp-lname">Nom de famille</label>
+        <input type="text" id="inp-lname" placeholder="Dupont" />
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="inp-email">Courriel</label>
+      <input type="email" id="inp-email" placeholder="jean@exemple.com" />
+    </div>
+    <div class="field-row">
+      <div class="field-group">
+        <label class="field-label" for="inp-dob">Date de naissance</label>
+        <input type="text" id="inp-dob" placeholder="1990-05-15" />
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="inp-phone">Téléphone</label>
+        <input type="tel" id="inp-phone" placeholder="514-555-0123" />
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="inp-ramq">RAMQ / No. Santé (optionnel)</label>
+      <input type="text" id="inp-ramq" placeholder="DUPJ 1234 5678" />
+    </div>
+    <button class="btn-save" id="saveBtn">Save to Extension</button>
+    <div class="saved-badge" id="savedBadge">✓ Saved! Switch to Fill Form tab.</div>
+  </div>
+
+  <div class="footer">Pulseid · Your data stays in this extension.</div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

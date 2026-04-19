@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Pulseid Web Assistant",
+  "version": "1.0",
+  "description": "Securely autofills health information into Quebec platforms like Clic Santé from your Pulseid.",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://*.clicsante.ca/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Pulseid Assistant"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.clicsante.ca/*"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ]
+}

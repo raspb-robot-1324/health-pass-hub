@@ -3,12 +3,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { callMedicalAI, type Profile, type Medication, type Allergy, type Condition, type Appointment } from "@/lib/medical";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
-import { Sparkles, Loader2 } from "lucide-react";
+import { Sparkles, Loader2, Copy, ExternalLink, CheckCircle } from "lucide-react";
 
-type Mode = "triage" | "interactions" | "summary" | "prep" | "finder";
+type Mode = "triage" | "interactions" | "summary" | "prep" | "finder" | "clicsante";
 
 const MODES: { id: Mode; label: string; placeholder?: string }[] = [
   { id: "summary", label: "Weekly summary" },
+  { id: "clicsante", label: "Clic Santé Autofill", placeholder: "What kind of appointment do you need?" },
   { id: "interactions", label: "Drug interactions" },
   { id: "triage", label: "Symptom triage", placeholder: "Describe your symptoms…" },
   { id: "finder", label: "Find a doctor (QC)", placeholder: "What's the concern?" },
@@ -34,8 +35,9 @@ export function AIPanel({
   const [output, setOutput] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
-  const needsInput = mode === "triage" || mode === "finder";
+  const needsInput = mode === "triage" || mode === "finder" || mode === "clicsante";
 
   async function run() {
     setLoading(true);
@@ -50,8 +52,15 @@ export function AIPanel({
         appointments,
       };
       if (mode === "triage") payload.symptoms = input;
-      if (mode === "finder") payload.concern = input;
-      const content = await callMedicalAI(mode, payload);
+      if (mode === "finder" || mode === "clicsante") payload.concern = input;
+      
+      let content;
+      if (mode === "clicsante") {
+        // AI fallback logic for Clic Sante
+        content = `### Auto-fill Summary for Clic Santé\n\n**RAMQ/NAM:** (Please input manually)\n**Name:** ${profile?.full_name}\n**Gender:** ${profile?.sex || "-"}\n**Concerns:** ${input}\n**Medications:** ${meds.length} active\n**Allergies:** ${allergies.map(a=>a.name).join(', ') || 'None'}\n\n*Copy this summary and paste it into the "Reason for consultation" box when booking your appointment.*`;
+      } else {
+        content = await callMedicalAI(mode, payload);
+      }
       setOutput(content);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Something went wrong");
@@ -117,9 +126,31 @@ export function AIPanel({
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="prose prose-sm prose-invert mt-5 max-w-none rounded-2xl border border-border bg-background/40 p-5 text-sm text-foreground"
+          className="mt-5 rounded-2xl border border-border bg-background/40 p-5"
         >
-          <ReactMarkdown>{output}</ReactMarkdown>
+          <div className="prose prose-sm prose-invert max-w-none text-foreground mb-4">
+            <ReactMarkdown>{output}</ReactMarkdown>
+          </div>
+          
+          {mode === "clicsante" && (
+            <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-border mt-4">
+              <button 
+                onClick={() => { navigator.clipboard.writeText(output); setCopied(true); setTimeout(()=>setCopied(false), 2000); }} 
+                className="inline-flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-2 text-sm transition hover:bg-secondary focus:outline-none"
+              >
+                {copied ? <CheckCircle className="h-4 w-4 text-success" /> : <Copy className="h-4 w-4 text-muted-foreground" />}
+                {copied ? "Copied" : "Copy for Clic Santé"}
+              </button>
+              <a 
+                href="https://portal3.clicsante.ca/" 
+                target="_blank" 
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-xl bg-foreground text-background px-4 py-2 text-sm transition hover:bg-primary font-medium focus:outline-none"
+              >
+                <ExternalLink className="h-4 w-4" /> Go to portal
+              </a>
+            </div>
+          )}
         </motion.div>
       )}
 

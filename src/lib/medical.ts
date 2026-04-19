@@ -10,6 +10,7 @@ export type Profile = {
   blood_type: string | null;
   city: string | null;
   pulseid_code: string | null;
+  ramq_number: string | null;
   is_demo: boolean;
 };
 
@@ -45,6 +46,22 @@ export async function getActiveProfile(): Promise<Profile | null> {
       .eq("user_id", session.session.user.id)
       .maybeSingle();
     if (data) return data as Profile;
+
+    // If authenticated but no profile row exists yet (new signup), create one
+    const newCode = 'p-' + crypto.randomUUID().split('-')[0];
+    const { data: newProfile, error } = await supabase
+      .from("profiles")
+      .insert({
+        user_id: session.session.user.id,
+        full_name: session.session.user.email?.split("@")[0] || "New User",
+        pulseid_code: newCode,
+        is_demo: false,
+      })
+      .select()
+      .maybeSingle();
+      
+    if (newProfile) return newProfile as Profile;
+    if (error) console.error("Error creating profile:", error);
   }
   // fall back to demo
   const { data } = await supabase

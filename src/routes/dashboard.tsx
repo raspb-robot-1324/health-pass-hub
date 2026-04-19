@@ -1,10 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Pill, Calendar, MapPin, Stethoscope, Plus, ExternalLink, AlertCircle } from "lucide-react";
-import { SiteHeader } from "@/components/SiteHeader";
+import { Pill, Calendar, MapPin, Stethoscope, Plus, ExternalLink, AlertCircle, ShieldCheck, QrCode, ArrowRight } from "lucide-react";
 import { AIPanel } from "@/components/AIPanel";
+import { ProfileEditor } from "@/components/ProfileEditor";
 import { getActiveProfile, getMedicalBundle, callMedicalAI, type Profile, type Medication, type Appointment, type Allergy, type Condition } from "@/lib/medical";
+
+import { SiteHeader } from "@/components/SiteHeader";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -17,6 +19,7 @@ export const Route = createFileRoute("/dashboard")({
 });
 
 function Dashboard() {
+  const navigate = useNavigate({ from: Route.id });
   const [profile, setProfile] = useState<Profile | null>(null);
   const [meds, setMeds] = useState<Medication[]>([]);
   const [appts, setAppts] = useState<Appointment[]>([]);
@@ -27,19 +30,29 @@ function Dashboard() {
   const [prep, setPrep] = useState<string>("");
   const [prepLoading, setPrepLoading] = useState(false);
 
+  const loadProfile = async () => {
+    const p = await getActiveProfile();
+    
+    if (p && !p.is_demo && !p.ramq_number) {
+      navigate({ to: "/onboarding", replace: true });
+      return;
+    }
+    
+    setProfile(p);
+    if (p) {
+      const b = await getMedicalBundle(p.id);
+      setMeds(b.medications);
+      setAppts(b.appointments);
+      setAllergies(b.allergies);
+      setConditions(b.conditions);
+    }
+  };
+
   useEffect(() => {
-    (async () => {
-      const p = await getActiveProfile();
-      setProfile(p);
-      if (p) {
-        const b = await getMedicalBundle(p.id);
-        setMeds(b.medications);
-        setAppts(b.appointments);
-        setAllergies(b.allergies);
-        setConditions(b.conditions);
-      }
-    })();
+    loadProfile();
   }, []);
+
+  const [editorOpen, setEditorOpen] = useState(false);
 
   async function runPrep(a: Appointment) {
     setPrepFor(a.id);
@@ -69,7 +82,7 @@ function Dashboard() {
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
-      <main className="mx-auto max-w-7xl px-6 pt-32 pb-16">
+      <main className="mx-auto max-w-7xl px-6 pt-32 pb-28 md:pb-16">
         {profile.is_demo && (
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.25em] text-accent">
             ● Demo patient · sign in to use your own
@@ -81,7 +94,17 @@ function Dashboard() {
           className="grid gap-6 border-b border-border pb-10 md:grid-cols-12 md:items-end"
         >
           <div className="md:col-span-8">
-            <div className="font-mono text-xs uppercase tracking-[0.3em] text-primary">// Health overview</div>
+            <div className="flex items-center gap-4">
+              <div className="font-mono text-xs uppercase tracking-[0.3em] text-primary">// Health overview</div>
+              {!profile.is_demo && (
+                <button 
+                  onClick={() => setEditorOpen(true)}
+                  className="rounded-full border border-border px-3 py-1 text-[10px] uppercase tracking-[0.2em] font-mono hover:bg-secondary hover:text-foreground transition text-muted-foreground"
+                >
+                  Edit profile
+                </button>
+              )}
+            </div>
             <h1 className="mt-3 font-display text-6xl leading-[1] tracking-tight md:text-8xl">
               Hello, <span className="italic text-primary">{profile.full_name.split(" ")[0]}.</span>
             </h1>
@@ -94,8 +117,48 @@ function Dashboard() {
           </div>
         </motion.div>
 
+        {/* Quick-access cards for Passport & QR — always visible, especially useful on mobile */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="mt-6 grid grid-cols-2 gap-3"
+        >
+          <Link
+            to="/passport"
+            className="group flex items-center gap-4 rounded-2xl border border-border bg-card p-5 transition hover:border-emergency hover:bg-emergency/5"
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emergency/10 text-emergency">
+              <ShieldCheck className="h-5 w-5" />
+            </div>
+            <div className="flex-1">
+              <div className="font-display text-lg leading-tight">Emergency Passport</div>
+              <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground">Critical info for responders</div>
+            </div>
+            <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-emergency transition" />
+          </Link>
+          <Link
+            to="/qr"
+            className="group flex items-center gap-4 rounded-2xl border border-border bg-card p-5 transition hover:border-primary hover:bg-primary/5"
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+              <QrCode className="h-5 w-5" />
+            </div>
+            <div className="flex-1">
+              <div className="font-display text-lg leading-tight">QR Key</div>
+              <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground">Print or share your key</div>
+            </div>
+            <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition" />
+          </Link>
+        </motion.div>
+
         {/* Top row: Meds + Allergies/Conditions */}
-        <div className="mt-8 grid gap-4 md:grid-cols-12">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-6 grid gap-4 md:grid-cols-12"
+        >
           <Card className="md:col-span-7" icon={Pill} label="Today's medications" right={`${taken.size}/${meds.length}`}>
             <ul className="mt-5 divide-y divide-border">
               {meds.map((m) => {
@@ -160,10 +223,15 @@ function Dashboard() {
               </div>
             </Card>
           </div>
-        </div>
+        </motion.div>
 
         {/* Appointments + AI */}
-        <div className="mt-4 grid gap-4 md:grid-cols-12">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-4 grid gap-4 md:grid-cols-12"
+        >
           <Card className="md:col-span-7" icon={Calendar} label="Upcoming appointments">
             <ul className="mt-5 divide-y divide-border">
               {upcoming.map((a) => (
@@ -199,7 +267,14 @@ function Dashboard() {
           <div className="md:col-span-5">
             <AIPanel profile={profile} meds={meds} allergies={allergies} conditions={conditions} appointments={appts} />
           </div>
-        </div>
+        </motion.div>
+
+        <ProfileEditor 
+          open={editorOpen} 
+          onOpenChange={setEditorOpen} 
+          profileId={profile.id} 
+          onSaved={loadProfile} 
+        />
       </main>
     </div>
   );

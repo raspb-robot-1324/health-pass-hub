@@ -1,4 +1,4 @@
-// Lovable AI Gateway - medical assistant
+// Direct Google Gemini AI integration - medical assistant
 // Modes: triage | interactions | summary | prep | finder
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 
@@ -32,56 +32,59 @@ Deno.serve(async (req) => {
       });
     }
 
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
+    const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY");
+    if (!GEMINI_API_KEY) {
+      return new Response(JSON.stringify({ error: "GEMINI_API_KEY not configured. Set it in your Supabase secrets." }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     const userContent = buildUserMessage(mode, payload);
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    // Google Gemini API endpoint
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+    const response = await fetch(url, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
-        messages: [
-          { role: "system", content: system },
-          { role: "user", content: userContent },
-        ],
+        system_instruction: {
+          parts: [{ text: system }]
+        },
+        contents: [{
+          parts: [{ text: userContent }]
+        }],
+        generationConfig: {
+          temperature: 0.1, // Keep medical advice consistent
+          topK: 1,
+          topP: 1,
+          maxOutputTokens: 1024,
+        }
       }),
     });
 
-    if (response.status === 429) {
-      return new Response(JSON.stringify({ error: "Rate limit reached. Please retry shortly." }), {
-        status: 429,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-    if (response.status === 402) {
-      return new Response(JSON.stringify({ error: "AI credits exhausted. Top up in Workspace > Usage." }), {
-        status: 402,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
     if (!response.ok) {
-      const t = await response.text();
-      console.error("AI error", response.status, t);
-      return new Response(JSON.stringify({ error: "AI gateway error" }), {
+      const errorText = await response.text();
+      console.error("Gemini API Error:", response.status, errorText);
+      return new Response(JSON.stringify({ error: `AI Error: ${response.status}` }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
     const data = await response.json();
-    const content: string = data.choices?.[0]?.message?.content ?? "";
+    const content = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+
     return new Response(JSON.stringify({ content }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
-    console.error("medical-ai error", e);
+    console.error("medical-ai execution error", e);
     return new Response(
-      JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }),
+      JSON.stringify({ error: e instanceof Error ? e.message : "Internal Server Error" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   }
