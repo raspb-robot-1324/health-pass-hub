@@ -39,3 +39,4 @@ dist-ssr
 # Supabase Local
 supabase/.temp/
 supabase/.branches/
+.vercel/*

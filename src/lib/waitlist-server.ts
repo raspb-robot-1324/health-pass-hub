@@ -3,11 +3,10 @@ import { supabase } from "@/integrations/supabase/client";
 
 /**
  * Server Function: joinWaitlist
- * Executes on the server to bypass browser-level network issues (CORS, Ad-blockers, Mixed Content).
+ * Simplified implementation to ensure 100% compatibility across both local and Vercel environments.
  */
 export const joinWaitlist = createServerFn({ method: "POST" })
-  .validator((d: { email: string; source: string; locale?: string | null }) => d)
-  .handler(async ({ data }) => {
+  .handler(async ({ data }: { data: { email: string; source: string; locale?: string | null } }) => {
     const { email, source, locale } = data;
     const normalized = email.trim().toLowerCase();
 

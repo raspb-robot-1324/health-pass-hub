@@ -16698,7 +16698,7 @@ function getResponse() {
 }
 var HEADERS = { TSS_SHELL: "X-TSS_SHELL" };
 async function getStartManifest(matchedRoutes) {
-  const { tsrStartManifest } = await import("../_tanstack-start-manifest_v-DOcLN1Vk.mjs");
+  const { tsrStartManifest } = await import("../_tanstack-start-manifest_v-dYhCCCw_.mjs");
   const startManifest = tsrStartManifest();
   const rootRoute = startManifest.routes[rootRouteId] = startManifest.routes[rootRouteId] || {};
   rootRoute.assets = rootRoute.assets || [];
@@ -16725,7 +16725,7 @@ async function getStartManifest(matchedRoutes) {
 const manifest = {
   "daf741e214855209cd35d47beb18eeafa95e1b16a4e7710c123cbe24436ceacb": {
     functionName: "joinWaitlist_createServerFn_handler",
-    importer: () => import("./waitlist-server-C3pp9yEF.mjs")
+    importer: () => import("./waitlist-server-CszUZIn6.mjs")
   }
 };
 async function getServerFnById(id, access) {
@@ -17480,7 +17480,7 @@ var baseManifestPromise;
 var cachedFinalManifestPromise;
 async function loadEntries() {
   const [routerEntry, startEntry, pluginAdapters] = await Promise.all([
-    import("./router-HKvR8TqD.mjs").then((n2) => n2.h),
+    import("./router-DTRsK_vt.mjs").then((n2) => n2.h),
     import("./start-HYkvq4Ni.mjs"),
     import("../__23tanstack-start-plugin-adapters-Cwee5PKy.mjs")
   ]);
