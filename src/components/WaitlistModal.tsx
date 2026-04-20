@@ -3,6 +3,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { Sparkles, X, ChevronRight, Loader2, Check, AlertCircle, ShieldCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
+import { joinWaitlist } from "@/lib/waitlist-server";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -36,32 +37,20 @@ export function WaitlistModal({
 
     try {
       const normalized = email.trim().toLowerCase();
-      // Insert into `waitlist` table. See SQL at the bottom of this file for the schema.
-      // We don't return the row (minimal data exposure) and tolerate duplicate-email as a success,
-      // so a returning user doesn't get an alarming error.
-      const { error } = await supabase
-        .from("waitlist")
-        .insert({
+      
+      // Call the server function instead of direct client-side insert.
+      // This bypasses browser-level network issues (CORS, Ad-blockers, etc).
+      await joinWaitlist({
+        data: {
           email: normalized,
           source: "site_header",
           locale: typeof navigator !== "undefined" ? navigator.language : null,
-        });
-
-      if (error) {
-        // Postgres unique_violation code — treat as "already joined" (soft success).
-        if (error.code === "23505") {
-          setStatus("success");
-        } else {
-          console.error("Waitlist insert failed:", error);
-          setStatus("error");
-          setErrorMsg("Something went wrong. Please try again in a moment.");
         }
-        return;
-      }
+      });
 
       setStatus("success");
     } catch (err) {
-      console.error(err);
+      console.error("Waitlist join error:", err);
       setStatus("error");
       setErrorMsg("Network error. Check your connection and try again.");
     }
