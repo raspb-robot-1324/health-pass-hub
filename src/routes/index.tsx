@@ -10,12 +10,13 @@ import { EcgLine } from "@/components/EcgLine";
 import { getActiveProfile, getMedicalBundle, callMedicalAI, type Profile, type Medication, type Allergy, type Condition } from "@/lib/medical";
 import { InteractiveDemo } from "@/components/InteractiveDemo";
 import { useTranslation } from "react-i18next";
-import { SupportModal } from "@/components/SupportModal";
 import { WaitlistModal } from "@/components/WaitlistModal";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
+
+const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/00w00b67i3S13qpfUk4AU00";
 
 export const Route = createFileRoute("/")(  {
   head: () => ({
@@ -36,7 +37,6 @@ function Landing() {
   const orbScale = useTransform(scrollYProgress, [0, 1], [1, 0.7]);
   const titleY = useTransform(scrollYProgress, [0, 1], [0, -120]);
   const { t } = useTranslation();
-  const [supportOpen, setSupportOpen] = useState(false);
   const [waitlistOpen, setWaitlistOpen] = useState(false);
   const missionRef = useRef<HTMLDivElement>(null);
   const bentoRef = useRef<HTMLDivElement>(null);
@@ -202,14 +202,16 @@ function Landing() {
               <button onClick={() => setWaitlistOpen(true)} className="group inline-flex h-14 items-center justify-center gap-2 rounded-full border border-border px-8 text-base font-medium transition hover:border-primary hover:text-primary">
                 {t("waitlistButton")}
               </button>
-              <button onClick={() => setSupportOpen(true)} className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-primary/10 text-primary border border-primary/20 px-8 text-base font-medium transition hover:bg-primary/20">
+              <button 
+                onClick={() => window.open(STRIPE_PAYMENT_LINK, '_blank')} 
+                className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-primary/10 text-primary border border-primary/20 px-8 text-base font-medium transition hover:bg-primary/20"
+              >
                 <HeartPulse className="h-4 w-4" />
                 {t("supportButton")}
               </button>
             </div>
           </motion.div>
         </motion.div>
-        <SupportModal open={supportOpen} onOpenChange={setSupportOpen} />
         <WaitlistModal open={waitlistOpen} onOpenChange={setWaitlistOpen} />
 
         <div className="absolute bottom-6 left-6 right-6 z-10 flex items-end justify-between font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
@@ -474,19 +476,25 @@ function Landing() {
                   <div className="text-xs text-muted-foreground">One-time or recurring</div>
                 </div>
               </div>
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-5 gap-2">
                 {[10, 25, 50, 100].map((amt) => (
                   <button
                     key={amt}
-                    onClick={() => setSupportOpen(true)}
+                    onClick={() => window.open(STRIPE_PAYMENT_LINK, '_blank')}
                     className="rounded-xl border border-border bg-background py-3 text-center text-sm font-medium transition hover:border-primary hover:bg-primary/5 hover:text-primary"
                   >
                     ${amt}
                   </button>
                 ))}
+                <button
+                  onClick={() => window.open(STRIPE_PAYMENT_LINK, '_blank')}
+                  className="rounded-xl border border-border bg-background py-3 text-center text-sm font-medium transition hover:border-primary hover:bg-primary/5 hover:text-primary"
+                >
+                  Other
+                </button>
               </div>
               <button
-                onClick={() => setSupportOpen(true)}
+                onClick={() => window.open(STRIPE_PAYMENT_LINK, '_blank')}
                 className="group w-full inline-flex h-14 items-center justify-center gap-2 rounded-full bg-gradient-primary text-sm font-medium text-primary-foreground shadow-elegant transition hover:opacity-90"
               >
                 <Heart className="h-4 w-4" />
@@ -524,7 +532,7 @@ function Landing() {
           <div className="flex items-center gap-4">
             <button onClick={() => setWaitlistOpen(true)} className="hover:text-primary transition">Join Waitlist</button>
             <span>·</span>
-            <button onClick={() => setSupportOpen(true)} className="hover:text-primary transition">Support</button>
+            <button onClick={() => window.open(STRIPE_PAYMENT_LINK, '_blank')} className="hover:text-primary transition">Support</button>
           </div>
         </div>
       </footer>
