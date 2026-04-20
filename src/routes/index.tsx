@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import { QRCodeSVG } from "qrcode.react";
-import { ArrowUpRight, ShieldCheck, QrCode, Activity, HeartPulse, Lock, Plus, Sparkles, Loader2, MapPin, Zap, Globe, FileText, Smartphone, AlertTriangle } from "lucide-react";
+import { ArrowUpRight, ShieldCheck, QrCode, Activity, HeartPulse, Lock, Plus, Sparkles, Loader2, MapPin, Zap, Globe, FileText, Smartphone, AlertTriangle, Heart } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { SiteHeader } from "@/components/SiteHeader";
 import { HeroOrb } from "@/components/HeroOrb";
@@ -17,12 +17,12 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/")(  {
   head: () => ({
     meta: [
-      { title: "Pulseid — Your medical life, in one signal" },
+      { title: "Novera — Your medical life, simplified" },
       { name: "description", content: "A medical OS for Quebec: live dashboard, emergency passport, secure QR key, and AI guidance." },
-      { property: "og:title", content: "Pulseid" },
+      { property: "og:title", content: "Novera" },
       { property: "og:description", content: "Medical dashboard, emergency passport, secure QR key." },
     ],
   }),
@@ -42,6 +42,7 @@ function Landing() {
   const bentoRef = useRef<HTMLDivElement>(null);
   const manifestoRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
+  const donateRef = useRef<HTMLDivElement>(null);
 
   // GSAP scroll animations
   useLayoutEffect(() => {
@@ -115,6 +116,22 @@ function Landing() {
           ease: "power2.out",
         });
       }
+
+      // Donate section — fade in
+      if (donateRef.current) {
+        gsap.from(donateRef.current.querySelectorAll(".donate-reveal"), {
+          scrollTrigger: {
+            trigger: donateRef.current,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+          y: 40,
+          opacity: 0,
+          duration: 0.8,
+          stagger: 0.12,
+          ease: "power2.out",
+        });
+      }
     });
     return () => ctx.revert();
   }, []);
@@ -174,7 +191,7 @@ function Landing() {
 
           <h1 className="mt-8 font-display text-[clamp(3rem,10vw,9rem)] leading-[0.92] tracking-tight">
             <SplitLine delay={0.3}>{t("heroTitle1")}</SplitLine>
-            <SplitLine delay={0.5}>{t("heroTitle2")}&nbsp;<span className="italic text-primary">{t("heroTitle3")}</span></SplitLine>
+            <SplitLine delay={0.5}>{t("heroTitle2")}&nbsp;<span className="text-primary">{t("heroTitle3")}</span></SplitLine>
           </h1>
 
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.1, duration: 0.8 }} className="mt-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
@@ -182,12 +199,6 @@ function Landing() {
               {t("heroSubtitle")}
             </p>
             <div className="flex flex-wrap items-center gap-4">
-              <Link to="/dashboard" className="group relative inline-flex h-14 items-center gap-3 overflow-hidden rounded-full bg-foreground pl-8 pr-2 text-base font-medium text-background transition hover:bg-primary">
-                {t("enterPlatform")}
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-background text-foreground transition group-hover:rotate-45">
-                  <ArrowUpRight className="h-4 w-4" />
-                </span>
-              </Link>
               <button onClick={() => setWaitlistOpen(true)} className="group inline-flex h-14 items-center justify-center gap-2 rounded-full border border-border px-8 text-base font-medium transition hover:border-primary hover:text-primary">
                 {t("waitlistButton")}
               </button>
@@ -230,15 +241,15 @@ function Landing() {
           </div>
           <div className="md:col-span-8">
             <h2 className="gsap-reveal font-display text-5xl leading-[1.05] tracking-tight md:text-7xl">
-              Healthcare in Quebec is <span className="italic text-primary">brilliant</span> — but the data lives in <span className="italic">silos.</span>
+              Healthcare in Quebec is <span className="text-primary">brilliant</span> — but the data lives in silos.
             </h2>
             <p className="gsap-reveal mt-8 max-w-2xl text-lg text-muted-foreground">
-              We believe your medical life shouldn't be scattered across paper folders, hospital portals, and a wallet card you might forget. Pulseid puts it in your pocket — encrypted, scannable, and actually useful. Built for the realities of CLSCs, Clic Santé and Info-Santé 811.
+              We believe your medical life shouldn't be scattered across paper folders, hospital portals, and a wallet card you might forget. Novera puts it in your pocket — encrypted, scannable, and actually useful.
             </p>
             <div className="gsap-reveal mt-12 grid gap-6 border-t border-border pt-8 md:grid-cols-3">
               {[
                 { v: "Patient-owned", l: "Your data, your keys, your call" },
-                { v: "Quebec-first", l: "Wired to Clic Santé, RVSQ, 811" },
+                { v: "Quebec-first", l: "Built for the Quebec health system" },
                 { v: "Care-grade", l: "Built with clinicians, not for them" },
               ].map((x) => (
                 <div key={x.v}>
@@ -256,12 +267,12 @@ function Landing() {
              <HeartPulse className="h-4 w-4" /> OUR MISSION
           </div>
           <h3 className="font-display text-4xl leading-tight md:text-5xl lg:text-6xl max-w-4xl tracking-tight text-foreground">
-             <span className="italic">Health information</span> that works when it matters most.
+             Health information that works when it matters most.
           </h3>
           
           <div className="mt-8 grid gap-8 md:grid-cols-2 text-lg text-muted-foreground leading-relaxed max-w-4xl">
             <p>
-              Every year, preventable medical errors occur because first responders don't have the information they need at the critical moment. Allergies unknown. Medications undocumented. Emergency contacts unreachable. Pulseid exists to close that gap permanently, for everyone.
+              Every year, preventable medical errors occur because first responders don't have the information they need at the critical moment. Allergies unknown. Medications undocumented. Emergency contacts unreachable. Novera exists to close that gap permanently, for everyone.
             </p>
             <p>
               We believe access to life-saving tools shouldn't depend on your income, your language, or your internet connection. Our mission is simple: give every person a universal medical profile that works offline, translates instantly, and is always in their pocket.
@@ -287,7 +298,7 @@ function Landing() {
              <div className="rounded-3xl border border-border bg-card p-6">
                 <ShieldCheck className="h-5 w-5 text-primary mb-4" />
                 <div className="font-display text-lg mb-2">Free, forever</div>
-                <div className="text-xs text-muted-foreground leading-relaxed">Pulseid is funded by grants and community support — never advertising. Every feature, for every user, at zero cost.</div>
+                <div className="text-xs text-muted-foreground leading-relaxed">Novera is funded by grants and community support — never advertising. Every feature, for every user, at zero cost.</div>
              </div>
              <div className="rounded-3xl border border-border bg-card p-6">
                 <Zap className="h-5 w-5 text-success mb-4" />
@@ -297,7 +308,7 @@ function Landing() {
              <div className="rounded-3xl border border-border bg-card p-6">
                 <Globe className="h-5 w-5 text-warning mb-4" />
                 <div className="font-display text-lg mb-2">Built for equity</div>
-                <div className="text-xs text-muted-foreground leading-relaxed">Multi-language support, accessible design, and zero data-selling make Pulseid a tool anyone can trust and actually use.</div>
+                <div className="text-xs text-muted-foreground leading-relaxed">Multi-language support, accessible design, and zero data-selling make Novera a tool anyone can trust and actually use.</div>
              </div>
              <div className="rounded-3xl border border-border bg-card p-6">
                 <Lock className="h-5 w-5 text-emergency mb-4" />
@@ -311,7 +322,7 @@ function Landing() {
       {/* NOVERA BENTO GRID */}
       <section className="bg-[#e0f2fe] py-32 text-[#0f172a]">
         <div ref={bentoRef} className="mx-auto max-w-6xl px-6" style={{ perspective: "1200px" }}>
-          <h2 className="font-display text-5xl leading-tight md:text-6xl mb-4 italic tracking-tight">Everything you need.</h2>
+          <h2 className="font-display text-5xl leading-tight md:text-6xl mb-4 tracking-tight">Everything you need.</h2>
           <p className="text-lg opacity-80 mb-16">Designed to be useful when the stakes are highest.</p>
           
           <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-6 grid-rows-[auto_auto_auto_auto]">
@@ -395,7 +406,7 @@ function Landing() {
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-4">
             <div className="font-mono text-xs uppercase tracking-[0.3em] text-primary">// 03 — The crew</div>
-            <h2 className="mt-4 font-display text-5xl leading-[1] tracking-tight md:text-6xl">Three people, <span className="italic text-primary">one mission.</span></h2>
+            <h2 className="mt-4 font-display text-5xl leading-[1] tracking-tight md:text-6xl">Three people, <span className="text-primary">one mission.</span></h2>
           </div>
           <div className="md:col-span-8 grid gap-4 sm:grid-cols-3">
             {[
@@ -413,7 +424,7 @@ function Landing() {
               >
                 <div className="aspect-square overflow-hidden rounded-2xl relative" style={{ background: `radial-gradient(circle at 30% 30%, oklch(0.6 0.18 ${m.hue}), oklch(0.2 0.04 240))` }}>
                   <img src={m.image} alt={m.name} className="absolute inset-0 h-full w-full object-cover mix-blend-overlay opacity-50 transition duration-500 group-hover:opacity-100 group-hover:scale-105" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-                  <div className="absolute inset-0 flex h-full w-full items-end justify-start p-4 text-7xl font-display text-background/40 italic z-10 pointer-events-none">{m.name.split(" ")[0]?.[0]}</div>
+                  <div className="absolute inset-0 flex h-full w-full items-end justify-start p-4 text-7xl font-display text-background/40 z-10 pointer-events-none">{m.name.split(" ")[0]?.[0]}</div>
                 </div>
                 <div className="mt-4 font-display text-2xl">{m.name}</div>
                 <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{m.role}</div>
@@ -431,32 +442,75 @@ function Landing() {
           <div className="word font-mono text-xs uppercase tracking-[0.3em] text-primary">// Manifesto</div>
           <p className="mt-8 font-display text-4xl leading-[1.15] tracking-tight md:text-6xl">
             {"Health data shouldn't sit in a portal you'll never visit. It should".split(" ").map((w, i) => <span key={i} className="word inline-block mr-[0.3em]">{w}</span>)}{" "}
-            <span className="word italic text-primary inline-block mr-[0.3em]">travel with you</span>{" "}
+            <span className="word text-primary inline-block mr-[0.3em]">travel with you</span>{" "}
             {"surface".split(" ").map((w, i) => <span key={`s${i}`} className="word inline-block mr-[0.3em]">{w}</span>)}{" "}
-            <span className="word italic text-primary inline-block mr-[0.3em]">when you need it</span>{" "}
+            <span className="word text-primary inline-block mr-[0.3em]">when you need it</span>{" "}
             {"and answer to".split(" ").map((w, i) => <span key={`a${i}`} className="word inline-block mr-[0.3em]">{w}</span>)}{" "}
-            <span className="word italic text-primary inline-block">no one but you.</span>
+            <span className="word text-primary inline-block">no one but you.</span>
           </p>
+        </div>
+      </section>
+
+      {/* DONATIONS */}
+      <section ref={donateRef} className="relative mx-auto max-w-7xl px-6 py-32">
+        <div className="grid gap-12 md:grid-cols-12 md:items-center">
+          <div className="md:col-span-7">
+            <div className="donate-reveal font-mono text-xs uppercase tracking-[0.3em] text-primary">// Support Novera</div>
+            <h2 className="donate-reveal mt-6 font-display text-5xl leading-[1.05] tracking-tight md:text-7xl">
+              Help us keep healthcare<br />accessible to <span className="text-primary">everyone.</span>
+            </h2>
+            <p className="donate-reveal mt-6 max-w-xl text-lg text-muted-foreground leading-relaxed">
+              Novera is free, forever. No ads, no data sales, no premium tiers. We rely on community support and grants to cover servers, integrations, and ongoing development. Every dollar goes directly to building a tool that saves lives.
+            </p>
+          </div>
+          <div className="md:col-span-5 md:col-start-8">
+            <div className="donate-reveal rounded-3xl border border-border bg-card p-8 space-y-6">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                  <Heart className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <div className="font-display text-lg">Make a contribution</div>
+                  <div className="text-xs text-muted-foreground">One-time or recurring</div>
+                </div>
+              </div>
+              <div className="grid grid-cols-4 gap-2">
+                {[10, 25, 50, 100].map((amt) => (
+                  <button
+                    key={amt}
+                    onClick={() => setSupportOpen(true)}
+                    className="rounded-xl border border-border bg-background py-3 text-center text-sm font-medium transition hover:border-primary hover:bg-primary/5 hover:text-primary"
+                  >
+                    ${amt}
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={() => setSupportOpen(true)}
+                className="group w-full inline-flex h-14 items-center justify-center gap-2 rounded-full bg-gradient-primary text-sm font-medium text-primary-foreground shadow-elegant transition hover:opacity-90"
+              >
+                <Heart className="h-4 w-4" />
+                Donate now
+                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </button>
+              <p className="text-center text-xs text-muted-foreground">
+                Processed securely via Stripe · Tax receipts available
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* CTA */}
       <section className="relative mx-auto max-w-7xl px-6 py-32">
         <div className="grid gap-8 md:grid-cols-12 md:items-end">
-          <div className="md:col-span-7 md:col-start-2">
+          <div className="md:col-span-8 md:col-start-2">
             <div className="font-mono text-xs uppercase tracking-[0.3em] text-primary">// Begin</div>
             <h2 className="mt-6 font-display text-6xl leading-[1] tracking-tight md:text-8xl">
-              The clearest picture<br />of <span className="italic text-primary">your health,</span><br />when it counts.
+              The clearest picture<br />of <span className="text-primary">your health,</span><br />when it counts.
             </h2>
           </div>
-          <div className="md:col-span-3 md:col-start-10 space-y-4">
-            <Link to="/dashboard" className="group flex items-center justify-between rounded-2xl border border-border bg-card p-6 transition hover:border-primary">
-              <div>
-                <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Step one</div>
-                <div className="mt-1 font-display text-2xl">Open the app</div>
-              </div>
-              <HeartPulse className="h-6 w-6 text-primary" />
-            </Link>
+          <div className="md:col-span-3 md:col-start-10">
             <div className="flex items-center gap-2 px-2 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
               <Lock className="h-3 w-3" /> end-to-end encrypted · always
             </div>
@@ -466,9 +520,12 @@ function Landing() {
 
       <footer className="border-t border-border">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-10 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground md:flex-row md:items-center md:justify-between">
-          <div>© 2026 Pulseid Health · Made in Montréal</div>
-          <div className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" /> All systems nominal</div>
-          <div>Connected to Clic Santé · RVSQ · 811</div>
+          <div>© 2026 Novera Health · Made in Montréal</div>
+          <div className="flex items-center gap-4">
+            <button onClick={() => setWaitlistOpen(true)} className="hover:text-primary transition">Join Waitlist</button>
+            <span>·</span>
+            <button onClick={() => setSupportOpen(true)} className="hover:text-primary transition">Support</button>
+          </div>
         </div>
       </footer>
     </div>
@@ -484,7 +541,7 @@ function SplitLine({ children, delay = 0 }: { children: React.ReactNode; delay?:
 }
 
 function QRPreview({ profile }: { profile: Profile | null }) {
-  const url = `https://pulseid.health/p/${profile?.pulseid_code ?? "ax-m72k"}`;
+  const url = `https://novera.health/p/${profile?.pulseid_code ?? "ax-m72k"}`;
   return (
     <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="rounded-3xl border border-border bg-card p-6">
       <div className="flex items-center gap-2"><QrCode className="h-4 w-4 text-primary" /><span className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">QR key · live</span></div>

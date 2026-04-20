@@ -76,7 +76,7 @@ export function AIPanel({
           <Sparkles className="h-4 w-4 text-primary-foreground" />
         </div>
         <div>
-          <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">// Pulseid AI</div>
+          <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">// Novera AI</div>
           <div className="font-display text-xl">Medical assistant</div>
         </div>
       </div>

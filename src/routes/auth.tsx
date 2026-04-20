@@ -7,8 +7,8 @@ import { Loader2, ArrowLeft } from "lucide-react";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign in — Pulseid" },
-      { name: "description", content: "Create your Pulseid account or sign in." },
+      { title: "Sign in — Novera" },
+      { name: "description", content: "Create your Novera account or sign in." },
     ],
   }),
   component: AuthPage,
@@ -69,7 +69,7 @@ function AuthPage() {
           <div>
             <div className="font-mono text-xs uppercase tracking-[0.3em] text-primary">// Account</div>
             <h1 className="mt-4 font-display text-6xl leading-[1] tracking-tight md:text-7xl">
-              {mode === "signin" ? <>Welcome <span className="italic text-primary">back.</span></> : <>Begin your <span className="italic text-primary">Pulseid.</span></>}
+              {mode === "signin" ? <>Welcome <span className="text-primary">back.</span></> : <>Begin your <span className="text-primary">Novera.</span></>}
             </h1>
             <p className="mt-6 max-w-md text-muted-foreground">
               {mode === "signin"

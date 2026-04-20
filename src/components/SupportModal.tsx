@@ -38,7 +38,7 @@ export function SupportModal({ open, onOpenChange }: { open: boolean; onOpenChan
                 <span className="sr-only">Close</span>
               </Dialog.Close>
             </div>
-            <Dialog.Title className="font-display text-4xl mt-4">Fuel the <span className="italic text-primary">vision.</span></Dialog.Title>
+            <Dialog.Title className="font-display text-4xl mt-4">Fuel the <span className="text-primary">vision.</span></Dialog.Title>
             <Dialog.Description className="text-muted-foreground mt-2 text-sm leading-relaxed">
               We are building a unified medical operating system for Quebec. Your contribution helps us maintain servers and expand integrations with the provincial systems.
             </Dialog.Description>

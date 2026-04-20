@@ -103,7 +103,7 @@ export function WaitlistModal({
             </div>
 
             <Dialog.Title className="font-display text-4xl mt-4 leading-tight">
-              Be the <span className="italic text-primary">first.</span>
+              Be the <span className="text-primary">first.</span>
             </Dialog.Title>
             <Dialog.Description className="text-muted-foreground mt-2 text-sm leading-relaxed">
               Join the waitlist to receive early access as we roll out integrations with Québec clinics,

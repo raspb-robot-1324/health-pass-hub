@@ -11,7 +11,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
-      { title: "Dashboard — Pulseid" },
+      { title: "Dashboard — Novera" },
       { name: "description", content: "Your medical dashboard." },
     ],
   }),
@@ -106,7 +106,7 @@ function Dashboard() {
               )}
             </div>
             <h1 className="mt-3 font-display text-6xl leading-[1] tracking-tight md:text-8xl">
-              Hello, <span className="italic text-primary">{profile.full_name.split(" ")[0]}.</span>
+              Hello, <span className="text-primary">{profile.full_name.split(" ")[0]}.</span>
             </h1>
           </div>
           <div className="md:col-span-4 space-y-2 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">

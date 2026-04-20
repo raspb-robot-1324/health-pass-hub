@@ -20,7 +20,7 @@ export function InteractiveDemo() {
         </div>
       </div>
       <div>
-        <h2 className="font-display text-5xl leading-[1] tracking-tight md:text-6xl">Try it <span className="italic text-primary">yourself.</span></h2>
+        <h2 className="font-display text-5xl leading-[1] tracking-tight md:text-6xl">Try it <span className="text-primary">yourself.</span></h2>
         <p className="mt-4 text-lg text-muted-foreground max-w-xl">
           Edit a sample profile and watch your emergency card update in real-time. No sign-up needed.
         </p>
@@ -91,7 +91,7 @@ export function InteractiveDemo() {
                         <ShieldCheck className="h-8 w-8 text-[#93c5fd]" />
                         <div>
                           <div className="font-display text-2xl truncate w-32">{name || "Name"}</div>
-                          <div className="font-mono text-[9px] uppercase tracking-[0.1em] text-[#94a3b8] truncate">Pulseid Emergency</div>
+                          <div className="font-mono text-[9px] uppercase tracking-[0.1em] text-[#94a3b8] truncate">Novera Emergency</div>
                         </div>
                       </div>
                       <div className="h-10 w-10 rounded-full bg-[#f59e0b] text-white flex items-center justify-center font-bold text-sm shrink-0">

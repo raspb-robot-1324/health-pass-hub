@@ -72,7 +72,7 @@ function OnboardingFlow() {
   }
 
   const steps = [
-    { num: 1, title: "Welcome to Pulseid", icon: ShieldCheck },
+    { num: 1, title: "Welcome to Novera", icon: ShieldCheck },
     { num: 2, title: "Critical Details", icon: Activity },
   ];
 
@@ -81,7 +81,7 @@ function OnboardingFlow() {
       {/* LEFT: Marketing / Progress Context */}
       <div className="hidden lg:flex w-1/3 bg-card border-r border-border p-12 flex-col justify-between relative overflow-hidden">
         <div className="relative z-10">
-          <div className="font-display tracking-tight text-3xl mb-12">Pulseid.</div>
+          <div className="font-display tracking-tight text-3xl mb-12">Novera.</div>
           <div className="space-y-8">
             {steps.map(s => (
               <div key={s.num} className={`flex items-center gap-4 transition-opacity ${step === s.num ? 'opacity-100' : 'opacity-40'}`}>
@@ -106,7 +106,7 @@ function OnboardingFlow() {
             {step === 1 && (
               <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8">
                 <div className="font-mono text-xs uppercase tracking-[0.3em] text-primary">// Secure Initialization</div>
-                <h1 className="font-display text-5xl leading-tight">Let's encrypt your <br/><span className="italic text-primary">baseline health profile.</span></h1>
+                <h1 className="font-display text-5xl leading-tight">Let's encrypt your <br/><span className="text-primary">baseline health profile.</span></h1>
                 <p className="text-muted-foreground text-lg">
                   Before we generate your revocable QR key, we need foundational information. This data is fully encrypted and never sold.
                 </p>

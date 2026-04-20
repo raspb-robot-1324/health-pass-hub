@@ -11,7 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/qr")({
   head: () => ({
     meta: [
-      { title: "QR Key — Pulseid" },
+      { title: "QR Key — Novera" },
       { name: "description", content: "Generate a secure, revocable QR key." },
     ],
   }),
@@ -186,7 +186,7 @@ function QRPage() {
             <h1 className="mt-3 font-display text-5xl leading-[0.95] tracking-tight md:text-8xl text-balance">
               Your safety,
               <br />
-              compressed in <span className="italic text-primary">one key.</span>
+              compressed in <span className="text-primary">one key.</span>
             </h1>
             <p className="mt-8 max-w-md text-muted-foreground text-lg leading-relaxed">
               Responders can scan this to see your live medical profile or instantly add your emergency data as a contact on their device.
@@ -248,7 +248,7 @@ function QRPage() {
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">Pulseid · {qrMode === 'vcard' ? 'vCard Key' : 'Standard Key'}</div>
+                    <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">Novera · {qrMode === 'vcard' ? 'vCard Key' : 'Standard Key'}</div>
                     <div className="mt-2 font-display text-4xl leading-tight">{profile.full_name}</div>
                     <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">ID · {displayId}</div>
                   </div>

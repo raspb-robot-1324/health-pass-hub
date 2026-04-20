@@ -78,13 +78,13 @@ function ResponderView() {
             {isResponder ? "CRITICAL EMERGENCY VIEW · RESPONDER_MODE_ACTIVE" : "// Public Medical Key"}
           </div>
           <h1 className={`mt-3 font-display leading-[1] tracking-tight ${isResponder ? 'text-[clamp(4rem,12vw,10rem)] text-white' : 'text-7xl md:text-8xl'}`}>
-            {firstName} <span className="italic">{lastName}</span>
+            {firstName} <span>{lastName}</span>
           </h1>
           <div className="mt-4 flex flex-wrap gap-x-8 gap-y-2 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
             <span>Age {profile.age ?? "—"}</span>
             <span className={isResponder ? 'text-white font-bold' : ''}>{profile.sex ?? "—"}</span>
             {profile.ramq_number && <span className="text-primary tracking-widest">RAMQ: {profile.ramq_number}</span>}
-            <span>Pulseid #{profile.pulseid_code}</span>
+            <span>Novera #{profile.pulseid_code}</span>
           </div>
         </div>
 

@@ -1,4 +1,5 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import myLogo from "@/assets/myLogo.png";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -57,15 +58,7 @@ export function SiteHeader() {
       >
         <div className="flex items-center justify-between rounded-full border border-border/60 bg-background/70 px-3 py-2 backdrop-blur-2xl shadow-card">
           <Link to="/" className="flex items-center gap-2.5 pl-2">
-            <div className="relative h-7 w-7">
-              <div className="absolute inset-0 rounded-full bg-primary blur-md opacity-60" />
-              <div className="relative flex h-7 w-7 items-center justify-center rounded-full bg-gradient-primary">
-                <svg viewBox="0 0 24 24" className="h-4 w-4 text-primary-foreground" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M3 12h3l2-7 4 14 2-7h7" />
-                </svg>
-              </div>
-            </div>
-            <span className="font-display text-xl tracking-tight">Pulse<span className="italic text-primary">id</span></span>
+            <img src={myLogo} alt="Novera" className="h-7 w-auto" />
           </Link>
 
           <nav className="hidden items-center gap-1 md:flex">

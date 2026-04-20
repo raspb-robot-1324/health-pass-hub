@@ -8,7 +8,7 @@ import { getActiveProfile, getMedicalBundle, type Profile, type Medication, type
 export const Route = createFileRoute("/passport")({
   head: () => ({
     meta: [
-      { title: "Emergency Passport — Pulseid" },
+      { title: "Emergency Passport — Novera" },
       { name: "description", content: "Critical medical info for first responders." },
     ],
   }),
@@ -87,13 +87,13 @@ function Passport() {
         >
           <div className="font-mono text-xs uppercase tracking-[0.3em] text-emergency">// Emergency Passport</div>
           <h1 className="mt-3 font-display text-7xl leading-[1] tracking-tight md:text-8xl">
-            {firstName} <span className="italic">{lastName}</span>
+            {firstName} <span>{lastName}</span>
           </h1>
           <div className="mt-4 flex flex-wrap gap-x-8 gap-y-2 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
             <span>Age {profile.age ?? "—"}</span>
             <span>{profile.sex ?? "—"}</span>
             <span>{profile.city ?? "—"}</span>
-            <span>Pulseid #{profile.pulseid_code ?? "—"}</span>
+            <span>Novera #{profile.pulseid_code ?? "—"}</span>
           </div>
         </motion.div>
 

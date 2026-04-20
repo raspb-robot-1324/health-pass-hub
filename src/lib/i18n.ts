@@ -5,7 +5,7 @@ const resources = {
   en: {
     translation: {
       "welcomeBack": "Welcome back.",
-      "beginPulseid": "Begin your Pulseid.",
+      "beginNovera": "Begin your Novera.",
       "signInDescription": "Sign in to your dashboard, passport and QR key.",
       "createDescription": "Create a free account. Your data is encrypted and only ever yours.",
       "signIn": "Sign in",
@@ -16,8 +16,7 @@ const resources = {
       "heroTitle1": "Your medical",
       "heroTitle2": "life, in one",
       "heroTitle3": "signal.",
-      "heroSubtitle": "Pulseid weaves together a medical dashboard, an emergency passport, a revocable QR key, and AI guidance — built for Quebec patients and connected to Clic Santé, RVSQ and Bonjour-santé.",
-      "enterPlatform": "Enter the platform",
+      "heroSubtitle": "Novera brings together a medical dashboard, an emergency passport, a revocable QR key, and AI guidance — built for Quebec patients.",
       "dashboardTitle": "Hello",
       "healthOverview": "// Health overview",
       "activeMeds": "Active meds",
@@ -43,7 +42,7 @@ const resources = {
   fr: {
     translation: {
       "welcomeBack": "De retour.",
-      "beginPulseid": "Commencez votre Pulseid.",
+      "beginNovera": "Commencez votre Novera.",
       "signInDescription": "Connectez-vous à votre tableau de bord, votre passeport et votre clé QR.",
       "createDescription": "Créez un compte gratuit. Vos données sont chiffrées et vous appartiennent.",
       "signIn": "Se connecter",
@@ -54,8 +53,7 @@ const resources = {
       "heroTitle1": "Votre vie médicale,",
       "heroTitle2": "dans un seul",
       "heroTitle3": "signal.",
-      "heroSubtitle": "Pulseid regroupe un tableau de bord médical, un passeport d'urgence, une clé QR révocable et des conseils par IA — conçus pour les patients québécois et connectés à Clic Santé, RVSQ et Bonjour-santé.",
-      "enterPlatform": "Entrer sur la plateforme",
+      "heroSubtitle": "Novera regroupe un tableau de bord médical, un passeport d'urgence, une clé QR révocable et des conseils par IA — conçus pour les patients québécois.",
       "dashboardTitle": "Bonjour",
       "healthOverview": "// Aperçu santé",
       "activeMeds": "Médicaments actifs",
